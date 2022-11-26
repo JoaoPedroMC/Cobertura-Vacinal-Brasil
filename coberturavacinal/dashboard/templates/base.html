@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{% static '/assets/css/style.css' %}" />
+  <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet" />
+  <title>Cobertura Vacinal</title>
+  <link rel="icon" type="image/png" href="{% static '/assets/img/vaccine.png' %}">
+</head>
+
+<body>
+  <nav>
+    <div class="logo">
+      <i class="bx bx-menu menu-icon"></i>
+      <span class="logo-name">COVID-19 e Cobertura vacinal</span>
+    </div>
+    <div class="sidebar">
+      <div class="logo">
+        <i class="bx bx-menu menu-icon"></i>
+      </div>
+
+      <div class="sidebar-content">
+        <ul class="lists">
+          <!--<li class="list">
+              <a href="/index" class="nav-link">
+                <i class='bx bxs-home icon'></i>
+                <span class="link">Início</span>
+              </a>
+            </li>-->
+          <li class="list">
+            <a href="/covid" class="nav-link">
+              <i class='bx bxs-virus icon'></i>
+              <span class="link">COVID-19</span>
+            </a>
+          </li>
+          <li class="list">
+            <a href="/vacinas" class="nav-link">
+              <i class='bx bxs-injection icon'></i>
+              <span class="link">Vacinas</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  {% block conteudo %}
+
+  {% endblock conteudo %}
+
+  <section class="overlay"></section>
+
+  <script>
+    const navBar = document.querySelector("nav"),
+      menuBtns = document.querySelectorAll(".menu-icon"),
+      overlay = document.querySelector(".overlay");
+
+    menuBtns.forEach((menuBtn) => {
+      menuBtn.addEventListener("click", () => {
+        navBar.classList.toggle("open");
+      });
+    });
+
+    overlay.addEventListener("click", () => {
+      navBar.classList.remove("open");
+    });
+  </script>
+</body>
+
+</html>

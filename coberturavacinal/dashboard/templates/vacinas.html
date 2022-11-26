@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js" type="text/javascript"></script>
+<script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
+
+<h1 style="padding: 20px">Dados vacinas por região</h1>
+<table class="tabela">
+  <tbody>
+    <thead>
+      <tr>
+        {% for col in df.columns %}
+        <th>
+          {{col}}
+        </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    {% for index, row in df.iterrows %}
+    <tr>
+      {% for cell in row %}
+      <td>
+        {{cell}}
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="float-container">
+  <h4>Média da cobertura vacinal 2018 - 2022 por região</h1>
+    <canvas id="Vacinas" height="400px" width="400px"></canvas>
+</div>
+
+<div class="float-container">
+  <h4>Média da cobertura vacinal 2018 - 2022 por ano</h1>
+    <canvas id="Vacinas_ano" height="400px" width="400px"></canvas>
+</div>
+  
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript">
+  const labels = {{ labels_regiao| safe}};
+  const labels_anos = {{ labels_ano| safe}};
+
+  const dataVacinas = {
+    labels: labels,
+    datasets: [{
+      label: 'BCG',
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data: {{ lista.0 }},
+            },
+            {
+      label: 'Febre amarela',
+      backgroundColor: 'rgb(255, 255, 0)',
+      borderColor: 'rgb(255, 255, 0)',
+      data: {{ lista.1 }}
+            },
+            {
+      label: 'Hepatite A',
+      backgroundColor: 'rgb(165, 216, 37)',
+      borderColor: 'rgb(165, 216, 37)',
+      data: {{ lista.2 }}
+            },
+            {
+      label: 'Hepatite B',
+      backgroundColor: 'rgb(143, 37, 216)',
+      borderColor: 'rgb(143, 37, 216)',
+      data: {{ lista.3 }}
+            },
+            {
+      label: 'Varicela',
+      backgroundColor: 'rgb(17, 236, 226)',
+      borderColor: 'rgb(17, 236, 226)',
+      data: {{ lista.4 }}
+            },
+            {
+      label: 'Poliomelite',
+      backgroundColor: 'rgb(240, 7, 7)',
+      borderColor: 'rgb(240, 7, 7)',
+      data: {{ lista.5 }}
+            },
+            {
+      label: 'Meningocócica Conjugada',
+      backgroundColor: 'rgb(137, 7, 240)',
+      borderColor: 'rgb(137, 7, 240)',
+      data: {{ lista.6 }}
+            },
+            {
+      label: 'Oral de Rotavírus Humano',
+      backgroundColor: 'rgb(243, 154, 17)',
+      borderColor: 'rgb(243, 154, 17)',
+      data: {{ lista.7 }}
+            },
+            {
+      label: 'Penta',
+      backgroundColor: 'rgb(34, 96, 47)',
+      borderColor: 'rgb(34, 96, 47)',
+      data: {{ lista.8 }}
+            },
+            {
+      label: 'Pneumocócica',
+      backgroundColor: 'rgb(145, 209, 205)',
+      borderColor: 'rgb(145, 209, 205)',
+      data: {{ lista.9 }}
+            },
+            {
+      label: 'Tetraviral',
+      backgroundColor: 'rgb(98, 100, 100)',
+      borderColor: 'rgb(98, 100, 100)',
+      data: {{ lista.10 }}
+            }]
+        };
+
+  const config = {
+    type: 'bar',
+    data: dataVacinas,
+    options: {
+      scales: {
+        y: {
+          title: {
+            display: true,
+            text: 'casos',
+            align: 'center'
+          }
+        }
+      }
+    }
+  };
+
+  const myChartVacinas = new Chart(
+    document.getElementById('Vacinas'),
+    config
+  );
+
+  const dataVacinasAno = {
+    labels: labels_anos,
+    datasets: [{
+      label: 'BCG',
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data: {{ lista_ano.0 }},
+            },
+            {
+      label: 'Febre amarela',
+      backgroundColor: 'rgb(255, 255, 0)',
+      borderColor: 'rgb(255, 255, 0)',
+      data: {{ lista_ano.1 }}
+            },
+            {
+      label: 'Hepatite A',
+      backgroundColor: 'rgb(165, 216, 37)',
+      borderColor: 'rgb(165, 216, 37)',
+      data: {{ lista_ano.2 }}
+            },
+            {
+      label: 'Hepatite B',
+      backgroundColor: 'rgb(143, 37, 216)',
+      borderColor: 'rgb(143, 37, 216)',
+      data: {{ lista_ano.3 }}
+            },
+            {
+      label: 'Varicela',
+      backgroundColor: 'rgb(17, 236, 226)',
+      borderColor: 'rgb(17, 236, 226)',
+      data: {{ lista_ano.4 }}
+            },
+            {
+      label: 'Poliomelite',
+      backgroundColor: 'rgb(240, 7, 7)',
+      borderColor: 'rgb(240, 7, 7)',
+      data: {{ lista_ano.5 }}
+            },
+            {
+      label: 'Meningocócica Conjugada',
+      backgroundColor: 'rgb(137, 7, 240)',
+      borderColor: 'rgb(137, 7, 240)',
+      data: {{ lista_ano.6 }}
+            },
+            {
+      label: 'Oral de Rotavírus Humano',
+      backgroundColor: 'rgb(243, 154, 17)',
+      borderColor: 'rgb(243, 154, 17)',
+      data: {{ lista_ano.7 }}
+            },
+            {
+      label: 'Penta',
+      backgroundColor: 'rgb(34, 96, 47)',
+      borderColor: 'rgb(34, 96, 47)',
+      data: {{ lista_ano.8 }}
+            },
+            {
+      label: 'Pneumocócica',
+      backgroundColor: 'rgb(145, 209, 205)',
+      borderColor: 'rgb(145, 209, 205)',
+      data: {{ lista_ano.9 }}
+            },
+            {
+      label: 'Tetraviral',
+      backgroundColor: 'rgb(98, 100, 100)',
+      borderColor: 'rgb(98, 100, 100)',
+      data: {{ lista_ano.10 }}
+            }]
+        };
+
+  const configVacinasAno = {
+    type: 'bar',
+    data: dataVacinasAno,
+    options: {
+      scales: {
+        y: {
+          title: {
+            display: true,
+            text: 'casos',
+            align: 'center'
+          }
+        }
+      }
+    }
+  };
+
+  const myChartVacinasAno = new Chart(
+    document.getElementById('Vacinas_ano'),
+    configVacinasAno
+  );
+</script>
+{% endblock conteudo %}

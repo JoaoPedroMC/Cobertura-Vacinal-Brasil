@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js" type="text/javascript"></script>
+<script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
+<div class="float-container">
+    <div class="float-child">
+        <h1>COVID-19 DADOS GERAIS</h1>
+        <p>Total de casos: {{covid_confirmed_cases}}</p>
+        <p>Total de casos recuperados: {{covid_recovered_cases}} ({{lista_covid_dados.1}}%)</p>
+        <p>Total de mortes: {{covid_death_cases}} ({{lista_covid_dados.0}}%)</p>
+        <p>Data de atualização: {{covid_report_date}}</p>
+    </div>
+    <div class="float-child">
+        <h1>COVID-19 VACINAÇÃO</h1>
+        <p>Total primeira dose: {{covid_vac_primeira_dose}} ({{lista_vac_taxas.0}}%)</p>
+        <p>Total segunda dose e dose única: {{covid_vac_segunda_dose}} ({{lista_vac_taxas.1}}%)</p>
+        <p>Total doses reforço: {{covid_vac_doses_reforco}} ({{lista_vac_taxas.2}}%)</p>
+        <p>Total de doses aplicadas: {{covid_vac_doses_totais}}</p>
+        <p>Data de atualização da vacinação: {{covid_vac_data_atualizacao}}</p>
+    </div>
+</div>
+
+<table class="tabela">
+    <tbody>
+        <thead>
+            <tr>
+                <th>UF</th>
+                <th>Estado</th>
+                <th>Casos</th>
+                <th>Mortes</th>
+                <th>Suspeitas</th>
+                <th>Negativo</th>
+                <th>Data atualização</th>
+            </tr>
+        </thead>
+        {% for data in covid_data_per_state %}
+        <tr>
+            <td>{{data.uf}}</td>
+            <td>{{data.state}}</td>
+            <td>{{data.cases}}</td>
+            <td>{{data.deaths}}</td>
+            <td>{{data.suspects}}</td>
+            <td>{{data.refuses}}</td>
+            <td>{{data.datetime}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="float-container">
+    <div class="float-child">
+        <h4>Casos por estado</h1>
+            <canvas id="Casos" height="400px" width="400px"></canvas>
+    </div>
+    <div class="float-child">
+        <h4>Mortes por estado</h1>
+            <canvas id="Mortes" height="400px" width="400px"></canvas>
+    </div>
+    <div class="float-child">
+        <h4>Vacinação</h1>
+            <canvas id="Vacinação" height="400px" width="400px"></canvas>
+            <p>*População atual brasileira aproximadamente 215,000,000 de pessoas</p>
+            <p>População vacinada com primeira dose: ({{lista_vac_taxas.0}}%)</p>
+            <p>População vacinada com segunda dose e dose única: ({{lista_vac_taxas.1}}%)</p>
+            <p>População vacinada com doses de reforço: ({{lista_vac_taxas.2}}%)</p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript">
+    const labelsUfs = {{ ufs| safe}};
+    const labelsTipoDose = {{ lista_vac_labels| safe}};
+    const dataCasos = {
+        labels: labelsUfs,
+        datasets: [{
+            label: 'Casos',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: {{ cases }},
+            }]
+        };
+
+    const config = {
+        type: 'bar',
+        data: dataCasos,
+        options: {
+            scales: {
+                y: {
+                    title: {
+                        display: true,
+                        text: 'casos',
+                        align: 'center'
+                    }
+                }
+            }
+        }
+    };
+
+    const myChartCasos = new Chart(
+        document.getElementById('Casos'),
+        config
+    );
+
+    const dataMortes = {
+        labels: labelsUfs,
+        datasets: [{
+            label: 'Mortes',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: {{ deaths }},
+            }]
+        };
+
+    const config2 = {
+        type: 'bar',
+        data: dataMortes,
+        options: {}
+    };
+
+    const myChartMortes = new Chart(
+        document.getElementById('Mortes'),
+        config2
+    );
+
+    const dataVacinacao = {
+        labels: labelsTipoDose,
+        datasets: [{
+            label: 'População vacinada',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: {{ lista_vac_dados }},
+            }]
+        };
+
+    const config3 = {
+        type: 'bar',
+        data: dataVacinacao,
+        options: {}
+    };
+
+    const myChartVacinacao = new Chart(
+        document.getElementById('Vacinação'),
+        config3
+    );
+</script>
+
+{% endblock conteudo %}
